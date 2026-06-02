@@ -6,8 +6,11 @@ from PySide6.QtGui import QFontMetrics
 from src.config import config
 from ok.test.TaskTestCase import TaskTestCase
 from ok.gui.tasks.ConfigItemFactory import config_widget
+from ok.gui.tasks.LabelAndButtons import LabelAndButtons
+from ok.gui.tasks.LabelAndFileSelector import LabelAndFileSelector
 from ok.gui.tasks.ModifyListDialog import ModifyListDialog
 from ok.gui.tasks.ModifyListItem import ModifyListItem
+from qfluentwidgets import PushButton
 
 from src.tasks.MyOneTimeTask import MyOneTimeTask
 
@@ -25,12 +28,21 @@ class TestMyOneTimeTask(TaskTestCase):
         self.assertIsInstance(defaults["Integer Config"], int)
         self.assertIsInstance(defaults["Float Config"], float)
         self.assertIsInstance(defaults["String Config"], str)
+        self.assertIsInstance(defaults["Folder Selector Config"], str)
+        self.assertIsInstance(defaults["File Selector Config"], str)
         self.assertIsInstance(defaults["List Config"], list)
         self.assertIsInstance(defaults["Drop Down Options Config"], list)
         self.assertEqual("String Value", defaults["String Config"])
         self.assertEqual(["List Value 1", "List Value 2"], defaults["List Config"])
         self.assertEqual("drop_down", config_type["Drop Down Config"]["type"])
         self.assertEqual("text_edit", config_type["Text Edit Config"]["type"])
+        self.assertEqual("file_selector", config_type["Folder Selector Config"]["type"])
+        self.assertEqual("folder", config_type["Folder Selector Config"]["selector_type"])
+        self.assertEqual("Select Demo Folder", config_type["Folder Selector Config"]["dialog_title"])
+        self.assertEqual("file_selector", config_type["File Selector Config"]["type"])
+        self.assertEqual("file", config_type["File Selector Config"]["selector_type"])
+        self.assertEqual("Select Demo File", config_type["File Selector Config"]["dialog_title"])
+        self.assertEqual("Python Files (*.py);;All Files (*)", config_type["File Selector Config"]["filter"])
         self.assertEqual("drop_down", config_type["Drop Down Options Config"]["type"])
         self.assertEqual(
             [
@@ -43,6 +55,11 @@ class TestMyOneTimeTask(TaskTestCase):
         self.assertEqual("multi_selection", config_type["Multi Selection Config"]["type"])
         self.assertEqual("global", config_type["Game Hotkey Config"]["type"])
         self.assertEqual("button", config_type["Button Config"]["type"])
+        self.assertEqual("button", config_type["Button Options Config"]["type"])
+        self.assertEqual(
+            ["Show Config Values", "Show Notification"],
+            [button["text"] for button in config_type["Button Options Config"]["buttons"]],
+        )
         self.assertEqual(
             {
                 "Drop Down Value 1": ["Sub Boolean Config"],
@@ -50,6 +67,47 @@ class TestMyOneTimeTask(TaskTestCase):
             },
             config_type["Drop Down Config"]["sub_configs"],
         )
+
+    def test_folder_selector_config_uses_folder_selector_widget(self):
+        widget = config_widget(
+            self.task.config_type,
+            self.task.config_description,
+            self.task.config,
+            "Folder Selector Config",
+            self.task.config.get("Folder Selector Config"),
+            self.task,
+        )
+        self.assertIsInstance(widget, LabelAndFileSelector)
+        self.assertEqual("folder", widget.selector_type)
+        self.assertFalse(hasattr(widget, "line_edit"))
+        self.assertEqual(str(self.task.config.get("Folder Selector Config") or ""), widget.value_label.text())
+
+    def test_file_selector_config_uses_file_selector_widget(self):
+        widget = config_widget(
+            self.task.config_type,
+            self.task.config_description,
+            self.task.config,
+            "File Selector Config",
+            self.task.config.get("File Selector Config"),
+            self.task,
+        )
+        self.assertIsInstance(widget, LabelAndFileSelector)
+        self.assertEqual("file", widget.selector_type)
+        self.assertEqual("Python Files (*.py);;All Files (*)", widget.config_type["filter"])
+        self.assertFalse(hasattr(widget, "line_edit"))
+        self.assertEqual(str(self.task.config.get("File Selector Config") or ""), widget.value_label.text())
+
+    def test_button_options_config_uses_multiple_buttons(self):
+        widget = config_widget(
+            self.task.config_type,
+            self.task.config_description,
+            self.task.config,
+            "Button Options Config",
+            self.task.config.get("Button Options Config"),
+            self.task,
+        )
+        self.assertIsInstance(widget, LabelAndButtons)
+        self.assertEqual(2, len(widget.findChildren(PushButton)))
 
     def test_options_available_uses_restricted_option_list_dialog(self):
         widget = config_widget(
