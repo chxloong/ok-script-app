@@ -1,31 +1,115 @@
 {
     "images": [
         {
-            "id": 1,
+            "id": 6,
             "file_name": "images/0.png",
-            "width": 3840,
-            "height": 2160
+            "width": 1280,
+            "height": 720
+        },
+        {
+            "id": 7,
+            "file_name": "images/0.png",
+            "width": 1280,
+            "height": 720
+        },
+        {
+            "id": 10,
+            "file_name": "images/1.png",
+            "width": 1280,
+            "height": 720
         }
     ],
     "annotations": [
         {
             "id": 1,
-            "image_id": 1,
+            "image_id": 7,
             "category_id": 1,
             "bbox": [
-                127,
-                66,
-                58,
-                45
+                721,
+                126,
+                24,
+                143
             ],
-            "area": 2610,
+            "area": 3432,
+            "iscrowd": 0
+        },
+        {
+            "id": 2,
+            "image_id": 7,
+            "category_id": 4,
+            "bbox": [
+                634,
+                30,
+                254,
+                680
+            ],
+            "area": 172720,
+            "iscrowd": 0
+        },
+        {
+            "id": 3,
+            "image_id": 10,
+            "category_id": 3,
+            "bbox": [
+                441,
+                412,
+                29,
+                130
+            ],
+            "area": 3770,
+            "iscrowd": 0
+        },
+        {
+            "id": 4,
+            "image_id": 10,
+            "category_id": 2,
+            "bbox": [
+                5,
+                50,
+                1295,
+                624
+            ],
+            "area": 808080,
+            "iscrowd": 0
+        },
+        {
+            "id": 5,
+            "image_id": 6,
+            "category_id": 5,
+            "bbox": [
+                429,
+                125,
+                88,
+                107
+            ],
+            "area": 9416,
             "iscrowd": 0
         }
     ],
     "categories": [
         {
             "id": 1,
-            "name": "this_is_a_place_holder",
+            "name": "xuanzetupo",
+            "supercategory": ""
+        },
+        {
+            "id": 2,
+            "name": "gerentupofanwei",
+            "supercategory": ""
+        },
+        {
+            "id": 3,
+            "name": "gerentupoxuanze",
+            "supercategory": ""
+        },
+        {
+            "id": 4,
+            "name": "liaotupofanwei",
+            "supercategory": ""
+        },
+        {
+            "id": 5,
+            "name": "shibai",
             "supercategory": ""
         }
     ]
